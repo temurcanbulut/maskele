@@ -1,0 +1,16 @@
+name: Feature request
+description: Describe a concrete workflow the tool could support better.
+body:
+  - type: textarea
+    id: workflow
+    attributes:
+      label: What are you trying to do?
+      description: Use invented data when illustrating the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and tradeoffs
+    validations:
+      required: true

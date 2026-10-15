@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="maskele-token" content="{{TOKEN}}">
+<title>maskele</title>
+<link rel="stylesheet" href="/app.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9Im1hc2tlbGUiPjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiByeD0iMjgiIGZpbGw9IiM2MzY2RjEiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMCAxMCkgc2NhbGUoLjg0KSI+PHBhdGggZD0iTTM2IDE2IEgxOCBWMTEyIEgzNiBNOTIgMTYgSDExMCBWMTEyIEg5MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utd2lkdGg9IjE2IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cmVjdCB4PSIzOCIgeT0iMzYiIHdpZHRoPSIzNCIgaGVpZ2h0PSIxOCIgcng9IjkiIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB4PSI1NiIgeT0iNzQiIHdpZHRoPSIzNCIgaGVpZ2h0PSIxOCIgcng9IjkiIGZpbGw9IiNGRkZGRkYiLz48L2c+PC9zdmc+">
+</head>
+<body>
+<header class="bar">
+  <div class="brand">
+    <svg viewBox="0 0 128 128" width="30" height="30" aria-hidden="true"><path d="M31 16 H17 V112 H31 M97 16 H111 V112 H97" fill="none" stroke="var(--mark)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><g fill="none" stroke="var(--mark-wave)" stroke-width="5" stroke-linecap="round"><path d="M35 39 C56 39 70 53 93 53"/><path d="M35 57 C56 57 70 71 93 71"/><path d="M35 75 C56 75 70 89 93 89"/></g><rect x="37" y="33" width="28" height="12" rx="6" fill="var(--mark-pill)"/><rect x="63" y="65" width="28" height="12" rx="6" fill="var(--mark-pill)"/></svg>
+    <span>maskele</span>
+  </div>
+  <div class="session">
+    <span class="muted">Oturum</span> <strong id="session">{{SESSION}}</strong>
+    <span class="dot" aria-hidden="true"></span>
+    <span id="vault-size">0 değer kasada</span>
+  </div>
+  <button id="clear" class="ghost" type="button">Oturumu sıfırla</button>
+</header>
+
+<main>
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1"><span class="n">1</span>Modele göndermeden önce</h2>
+    <p class="lede">Log'u, config'i ya da müşteri kaydını yapıştır. Hassas değerler soldaki metinde işaretlenir, sağda modele gidecek hâli oluşur.</p>
+    <div class="pair">
+      <div class="pane">
+        <label for="src">Orijinal</label>
+        <div class="editor">
+          <div id="src-hl" class="hl" aria-hidden="true"></div>
+          <textarea id="src" spellcheck="false" placeholder="Örn: 2026-10-15 ERROR 85.105.44.17 → db 10.20.3.9, müşteri Ahmet Yılmaz (TCKN 10000000146) …"></textarea> <!-- maskele:ignore -->
+        </div>
+        <div id="chips" class="chips" aria-live="polite"></div>
+        <div id="suspects" class="suspects" hidden>
+          <p class="suspects-title">Bunlar isim olabilir ama maskelenmedi. Kontrol et:</p>
+          <div id="suspect-list" class="suspect-list"></div>
+        </div>
+        <form id="also-form" class="also">
+          <label for="also" class="visually-hidden">Elle maskelenecek değer</label>
+          <input id="also" type="text" autocomplete="off" spellcheck="false" placeholder="Kaçan bir değeri buraya yazıp maskele">
+          <button type="submit">Bunu da maskele</button>
+        </form>
+      </div>
+      <div class="pane">
+        <label for="masked">Modele gidecek</label>
+        <div id="masked" class="out" tabindex="0" aria-live="polite"><span class="empty">Soldaki metin burada maskelenmiş olarak görünür.</span></div>
+        <div class="actions">
+          <button id="commit" type="button" class="primary" disabled>Maskele ve kopyala</button>
+          <span id="commit-msg" class="msg" role="status"></span>
+        </div>
+        <p class="caveat">Tespit eksiksiz değildir: özellikle sözlükte olmayan isimler kaçabilir. Göndermeden önce bu paneli bir kez oku.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2"><span class="n">2</span>Cevabı geri çevir</h2>
+    <p class="lede">Modelin cevabını yapıştır. Token'lar, bozulmuş yazımları da dahil, gerçek değerlerine döner.</p>
+    <div class="pair">
+      <div class="pane">
+        <label for="reply">Modelin cevabı</label>
+        <textarea id="reply" class="plain" spellcheck="false" placeholder="Örn: [[IP_1]] adresinden gelen istekler [[IP_3]] üzerindeki veritabanına ulaşamıyor…"></textarea>
+      </div>
+      <div class="pane">
+        <label for="restored">Gerçek değerlerle</label>
+        <div id="restored" class="out" tabindex="0" aria-live="polite"><span class="empty">Geri çevrilmiş cevap burada görünür.</span></div>
+        <div class="actions">
+          <button id="copy-restored" type="button" disabled>Kopyala</button>
+          <span id="restore-msg" class="msg" role="status"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <details class="vault" id="vault-box">
+    <summary>Kasadaki eşlemeler</summary>
+    <div class="vault-tools">
+      <label class="toggle"><input type="checkbox" id="reveal"> Değerleri göster</label>
+    </div>
+    <table>
+      <thead><tr><th scope="col">Token</th><th scope="col">Tür</th><th scope="col">Gerçek değer</th></tr></thead>
+      <tbody id="vault-rows"><tr><td colspan="3" class="muted">Kasa boş. İlk maskelemeden sonra eşlemeler burada listelenir.</td></tr></tbody>
+    </table>
+  </details>
+</main>
+
+<footer>
+  Her şey bu bilgisayarda çalışır. Bu sayfa dışarıya hiçbir istek atmaz.
+</footer>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+{
+  "version": "0.4.2",
+  "recorded_at": "2026-10-15T22:37:12.524736+00:00",
+  "seed": 20261015,
+  "samples": 3000,
+  "labeled_values": 4556,
+  "exposed_values": 114,
+  "exposure_rate": 0.02502194907813872,
+  "negative_lines": 38,
+  "negative_false_positive_lines": 0,
+  "per_kind": {
+    "NAME (sözlükte)": {
+      "values": 1044,
+      "true_positive": 1037,
+      "false_negative": 7,
+      "false_positive": 0,
+      "exposed": 7
+    },
+    "PHONE": {
+      "values": 271,
+      "true_positive": 271,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "EMAIL": {
+      "values": 368,
+      "true_positive": 368,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "SECRET": {
+      "values": 689,
+      "true_positive": 689,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "NAME (sözlük dışı)": {
+      "values": 237,
+      "true_positive": 211,
+      "false_negative": 26,
+      "false_positive": 0,
+      "exposed": 29
+    },
+    "ADDRESS": {
+      "values": 172,
+      "true_positive": 172,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "IBAN": {
+      "values": 198,
+      "true_positive": 198,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "MAC": {
+      "values": 95,
+      "true_positive": 95,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "IP": {
+      "values": 377,
+      "true_positive": 377,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "PLATE": {
+      "values": 168,
+      "true_positive": 168,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "NAME (küçük harf)": {
+      "values": 98,
+      "true_positive": 65,
+      "false_negative": 33,
+      "false_positive": 0,
+      "exposed": 35
+    },
+    "TCKN": {
+      "values": 284,
+      "true_positive": 284,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "PASSWORD": {
+      "values": 97,
+      "true_positive": 97,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "API_KEY": {
+      "values": 198,
+      "true_positive": 196,
+      "false_negative": 2,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "NAME (yabancı)": {
+      "values": 84,
+      "true_positive": 41,
+      "false_negative": 43,
+      "false_positive": 0,
+      "exposed": 43
+    },
+    "CARD": {
+      "values": 79,
+      "true_positive": 79,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    },
+    "VKN": {
+      "values": 97,
+      "true_positive": 97,
+      "false_negative": 0,
+      "false_positive": 0,
+      "exposed": 0
+    }
+  },
+  "interpretation": "Synthetic regression corpus; exposure means at least one non-whitespace gold character was not covered by a detected span. No real-world privacy guarantee."
+}

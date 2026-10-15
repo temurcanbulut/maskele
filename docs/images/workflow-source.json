@@ -1,0 +1,37 @@
+{
+  "dimensions": [
+    1265,
+    814
+  ],
+  "frames": 4,
+  "duration_ms": 24500,
+  "gif_sha256": "1c4e93add39c02c4589cf88674c55256c94e15af80e9d31c27c55d5557b15c68",
+  "screenshots": [
+    {
+      "source": "01-preview.png",
+      "screenshot_sha256": "3cad0b4bd2552df3f6b813bc9687fb78028ebd7ba98db2e55c9f1b1d452d05ee",
+      "caption": "01  İncele: aynı IP, her geçtiği yerde aynı token.",
+      "duration_ms": 6500
+    },
+    {
+      "source": "02-manual-rule.png",
+      "screenshot_sha256": "adab146336d53f5635fcdb46fb97ffdfa24b80dfac35beee09471efc68d94156",
+      "caption": "02  Kontrol et: otomatik yakalanmayan proje kodunu ekle.",
+      "duration_ms": 5000
+    },
+    {
+      "source": "03-committed.png",
+      "screenshot_sha256": "287da0e12cd4c507c30088ac4c21ae2f1bc7bb10617ccadb56f45792af571f0e",
+      "caption": "03  Maskele ve kopyala: 6 eşleşme, 5 benzersiz değer.",
+      "duration_ms": 5500
+    },
+    {
+      "source": "04-restored.png",
+      "screenshot_sha256": "954ef37608805a13d1c9d70074fd23f21e8d2b8d967fa0b3bc41276aeb1ca370",
+      "caption": "04  Geri çevir: örnek cevapta 5 token yerelde açılır.",
+      "duration_ms": 7500
+    }
+  ],
+  "runtime": "Actual same-origin Pyodide browser build",
+  "note": "Screenshots are unmodified within the caption frame; chapter holds are editorial, not performance timings. All inputs are synthetic. The reply was typed manually; no provider or LLM was contacted."
+}

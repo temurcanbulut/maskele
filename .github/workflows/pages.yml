@@ -1,0 +1,58 @@
+name: web
+
+# Tarayıcıda çalışan sürümü GitHub Pages'e yayımlar:
+# https://temurcanbulut.github.io/maskele/
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  PYODIDE_VERSION: "0.27.7"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Pyodide (core dağıtımı)
+        run: |
+          curl -fsSL -o pyodide.tar.bz2 \
+            "https://github.com/pyodide/pyodide/releases/download/${PYODIDE_VERSION}/pyodide-core-${PYODIDE_VERSION}.tar.bz2"
+          echo "9bc8f127db6c590b191b9aee754022cb41b1a36c7bac233776c11c5ecb541be8  pyodide.tar.bz2" | sha256sum --check --strict
+          tar xjf pyodide.tar.bz2
+      - name: Siteyi üret
+        run: python scripts/build_site.py --pyodide pyodide --out site
+      - name: Gerçek tarayıcıda dene
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+          python scripts/site_smoke.py site
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

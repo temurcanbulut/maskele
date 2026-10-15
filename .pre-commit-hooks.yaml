@@ -1,0 +1,7 @@
+- id: maskele-scan
+  name: maskele — hassas veri taraması
+  description: Commit edilen dosyalarda API anahtarı, TCKN, IBAN, e-posta gibi hassas verileri arar.
+  entry: maskele scan --fail
+  language: python
+  types: [text]
+  exclude: ^(tests/|examples/|.*\.lock$)

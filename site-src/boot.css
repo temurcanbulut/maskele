@@ -1,0 +1,6 @@
+
+/* Web sürümü: motor yükleme durumu */
+.boot { max-width: 1240px; margin: 16px auto 0; padding: 10px clamp(16px, 4vw, 40px); font-size: 14px;
+  color: var(--muted); }
+.boot.ok { color: var(--muted); }
+.boot.err { color: var(--k-secret); font-weight: 600; }

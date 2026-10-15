@@ -1,0 +1,18 @@
+# NetSec ekibinin .maskele.toml dosyası (örnek)
+[detect]
+enable = ["HOST"]                 # *.corp, *.local gibi iç host adları
+
+[policy]
+PRIVATE_KEY = "block"             # özel anahtar modele hiç gitmesin
+
+[allowlist]
+values = ["netsec@ornekfirma.com.tr"]   # ekip adresi maskelenmesin
+
+[[patterns]]
+name = "TALEP"
+regex = 'REQ-\d{5}'
+
+[[patterns]]
+name = "SICIL"
+regex = 'sicil[: ]+(?P<v>\d{4,6})'
+group = "v"

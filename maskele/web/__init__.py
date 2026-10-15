@@ -1,0 +1,1 @@
+"""Bundled browser interface assets."""
