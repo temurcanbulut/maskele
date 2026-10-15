@@ -43,6 +43,24 @@ Repeated values keep their tokens within a session. The surrounding context and 
 
 The browser downloads its own assets and Pyodide from the same site. Text processing happens in the tab. The proxy intentionally contacts the configured upstream; detected values are replaced, while authentication headers and other permitted fields are forwarded. [Trust boundaries](SECURITY.md).
 
+## See it in context
+
+These illustrated scenarios use invented records. Masking and restoration use the Maskele engine; model replies are written examples. The illustrations are in Turkish.
+
+### Keep repeated values connected
+
+Within the same local session, repeated IP addresses retain their tokens. Known name aliases can also refer back to the same person, so a masked record keeps useful relationships.
+
+![Three synthetic access requests: repeated IP and person tokens stay consistent, then a sample reply is restored locally](docs/senaryolar/tutarli-tokenlar.png)
+
+### Troubleshoot logs with detected secrets masked
+
+The database password, JWT and IP addresses become tokens while the error message and port stay readable. Tokens in the example reply are restored using the same local mapping.
+
+![Synthetic DevOps log: database password, JWT and IP addresses are masked before a sample reply is restored](docs/senaryolar/devops-hata-logu.png)
+
+[Explore all four scenarios: network access, consistent tokens, customer support and DevOps](docs/USE_CASES.tr.md).
+
 ## Run locally
 
 Python 3.11+. In a terminal:
@@ -85,8 +103,6 @@ The bundled synthetic benchmark contains **3,000 samples and 4,556 labeled value
 | Foreign names | 51.2% |
 
 [Full results and methodology](docs/benchmark.md) · [Machine-readable run](docs/verification/benchmark.json).
-
-[Scenario gallery (Türkçe)](docs/USE_CASES.tr.md).
 
 ## Boundaries to understand
 

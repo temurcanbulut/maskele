@@ -34,6 +34,24 @@ Log, config veya destek kaydındaki tespit edilen değerler `[[IP_1]]`, `[[NAME_
 
 Tarayıcı sürümü aynı Python motorunu Pyodide ile çalıştırır; uygulama ve motor dosyalarını kendi adresinden yükler, metni sunucuya göndermez. Proxy ise yapılandırılan LLM sağlayıcısına istek yapar; kimlik başlıkları ve izinli protokol alanları iletilir.
 
+## Örnek akışlar
+
+Bu senaryolardaki kişi, kurum ve kayıtlar uydurmadır. Maskeleme ve geri çevirme Maskele motoruyla yapılır; model cevapları temsili olarak yazılmıştır.
+
+### Aynı değer, aynı token
+
+Aynı yerel oturumda tekrarlanan IP adresleri aynı token'ı korur. Tanınan isim kısaltmaları da aynı kişiye bağlanabilir; böylece maskelenmiş kayıtta ilişkiler izlenebilir.
+
+![Üç sentetik erişim talebinde tekrarlanan IP ve kişi token’ları tutarlı kalır; örnek cevap yerelde geri çevrilir](docs/senaryolar/tutarli-tokenlar.png)
+
+### Log'daki tespit edilen sırları maskele
+
+Veritabanı parolası, JWT ve IP adresleri token'a dönüşürken hata metni ve port bilgisi okunabilir kalır. Örnek cevaptaki token'lar aynı yerel eşlemeyle geri çevrilir.
+
+![Sentetik DevOps logunda veritabanı parolası, JWT ve IP adresleri maskelenir; örnek cevap geri çevrilir](docs/senaryolar/devops-hata-logu.png)
+
+[Dört senaryonun tamamı: NetSec, tutarlı token’lar, müşteri destek ve DevOps](docs/USE_CASES.tr.md).
+
 ## Yerel kurulum
 
 Python 3.11+ gerekir:
@@ -61,8 +79,6 @@ maskele proxy --provider openai
 ```
 
 [CLI, yapılandırma, şifreli kasa ve proxy rehberi](docs/USAGE.tr.md) · [SDK örnekleri](examples/).
-
-[NetSec, müşteri destek ve DevOps senaryoları](docs/USE_CASES.tr.md).
 
 ## Ölçülen kapsam
 
