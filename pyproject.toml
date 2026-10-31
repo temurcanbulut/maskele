@@ -28,8 +28,8 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-crypto = ["cryptography>=42"]
-dev = ["pytest>=8", "cryptography>=42", "ruff>=0.6"]
+crypto = ["cryptography>=50.0.2"]
+dev = ["pytest>=8", "cryptography>=50.0.2", "ruff>=0.6"]
 
 [project.urls]
 Homepage = "https://github.com/temurcanbulut/maskele"
