@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "maskele"
-version = "0.4.2"
+version = "0.4.3"
 description = "LLM'e göndermeden önce hassas veriyi maskele, cevabı geri çevir. CLI, OpenAI/Anthropic proxy'si ve yerel arayüz; TCKN, VKN, IBAN, plaka ve Türkçe isim desteği."
 readme = "README.md"
 requires-python = ">=3.11"

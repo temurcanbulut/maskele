@@ -2,6 +2,12 @@
 
 Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/), sürümleme [SemVer](https://semver.org/lang/tr/).
 
+## [0.4.3] — 2026-11-01 · Kripto bağımlılığı güvenlik tabanı
+
+- İsteğe bağlı crypto ve dev eklentileri için cryptography alt sınırını 50.0.2'ye yükselt; bilinen açık içeren eski sürümler desteklenen aralığın dışında.
+- Yeni sürüm numarasıyla wheel ve kaynak dağıtımı hazırla. Temel kurulum halen harici çalışma zamanı bağımlılığı istemiyor.
+- Windows/Python 3.12 ve cryptography 50.0.2 ile 201 yerel test geçti. Algılama motoru ve önceki benchmark sonuçları değişmedi; yeni gerçek sağlayıcı veya model eğitimi iddiası yok.
+
 ## [0.4.2] — 2026-10-16 · Yayın hazırlığı
 
 - Türkçe/İngilizce giriş, uygulamadan kaydedilen kullanım akışı, mimari ve doğrulama kayıtları.
