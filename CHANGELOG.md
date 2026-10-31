@@ -2,6 +2,12 @@
 
 Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/), sürümleme [SemVer](https://semver.org/lang/tr/).
 
+## [0.4.4] — 2026-11-01 · Yayın bütünlüğü
+
+- Dağıtımı değişmez GitHub release ve doğrulanabilir release attestation kaydıyla yayımla.
+- Kripto alt sınırı 50.0.2 ve algılama motoru 0.4.3 ile aynı; sürüm ve paket metadata'sı yeni dağıtıma eşitlendi.
+- Kaynak, wheel ve SHA256 kayıtları aynı yayın tag'ine bağlı; model eğitimi veya yeni benchmark iddiası yok.
+
 ## [0.4.3] — 2026-11-01 · Kripto bağımlılığı güvenlik tabanı
 
 - İsteğe bağlı crypto ve dev eklentileri için cryptography alt sınırını 50.0.2'ye yükselt; bilinen açık içeren eski sürümler desteklenen aralığın dışında.
