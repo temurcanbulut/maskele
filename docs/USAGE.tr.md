@@ -242,7 +242,7 @@ pre-commit için `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/temurcanbulut/maskele
-    rev: v0.4.2
+    rev: v0.4.3
     hooks:
       - id: maskele-scan
 ```
