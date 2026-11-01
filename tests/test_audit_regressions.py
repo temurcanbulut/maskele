@@ -160,3 +160,24 @@ def test_standalone_provider_shapes_are_masked_without_any_network_lookup():
     values = ["123456789:" + "X" * 35, "SG." + "X" * 22 + "." + "Y" * 43, "dop_v1_" + "a" * 64, "mfa." + "Z" * 84]
     for value in values:
         assert value not in Masker().mask(value).text
+
+
+@pytest.mark.parametrize(
+    "kind,text",
+    [
+        ("PRIVATE_KEY", "-----BEGIN PRIVATE KEY-----\n" * 10000),
+        ("SECRET", "part-" * 20000),
+    ],
+)
+def test_pathological_pem_and_hyphenated_keys_finish(kind, text):
+    # Avoid Windows command-line length limits: send the fixture over stdin.
+    code = "import sys; from maskele import Masker; Masker(kinds=" + repr([kind]) + ").mask(sys.stdin.read())"
+    subprocess.run([sys.executable, "-c", code], input=text, text=True, timeout=3, check=True)
+
+
+def test_partial_private_key_is_masked_to_end_without_quadratic_rescans():
+    text = "Public note\n-----BEGIN RSA PRIVATE KEY-----\noffline-not-a-real-key\n"
+    assert Masker(kinds=["PRIVATE_KEY"]).mask(text).text == "Public note\n[[PRIVATE_KEY_1]]"
+    complete = "-----BEGIN PRIVATE KEY-----\nfixture\n-----END PRIVATE KEY-----"
+    result = Masker(kinds=["PRIVATE_KEY"]).mask(complete + " visible " + complete)
+    assert result.text == "[[PRIVATE_KEY_1]] visible [[PRIVATE_KEY_1]]"
