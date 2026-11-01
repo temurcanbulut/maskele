@@ -1,0 +1,17 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.500
+Review a synthetic support record.
+Repeated IPs keep the same token.
+
+00:00:06.500 --> 00:00:11.500
+The project code was missed.
+Add a manual masking rule.
+
+00:00:11.500 --> 00:00:17.000
+Mask and copy: six replacements,
+five unique original values.
+
+00:00:17.000 --> 00:00:24.500
+Restore a typed example reply locally.
+No LLM request is made.

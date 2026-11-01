@@ -15,9 +15,9 @@
 <p align="center">LLM'e göndermeden önce hassas değerleri yerelde maskele.<br>Tutarlı token'ları koru. Cevabı kendi bilgisayarında geri çevir.</p>
 <p align="center"><a href="README.md">English</a> · <a href="https://temurcanbulut.github.io/maskele/">Tarayıcıda dene</a> · <a href="#yerel-kurulum">Yerel kurulum</a> · <a href="docs/USAGE.tr.md">Ayrıntılı kullanım</a></p>
 
-![Gerçek arayüz akışı: sentetik metni inceleme, maskeleme, elle kural ekleme ve örnek cevabı geri çevirme](docs/images/workflow.gif)
+[![Gerçek arayüz akışı: sentetik metni inceleme, maskeleme, elle kural ekleme ve örnek cevabı geri çevirme](docs/images/workflow-2026-11.png)](docs/media/maskele-demo-24s.mp4)
 
-Çalışan uygulamadan, sentetik verilerle kaydedildi. Cevap elle yazılmış bir örnektir; LLM çağrısı yapılmaz. [Kayıt açıklaması](docs/DEMO.md).
+[24,5 saniyelik MP4’ü izle](docs/media/maskele-demo-24s.mp4) · [Türkçe altyazı](docs/media/maskele-demo.tr.srt) · [English captions](docs/media/maskele-demo.en.srt). Yenilenen arayüzün dört gerçek ekran görüntüsü ve sentetik örnekler kullanıldı. Beklemeler kurgu süresidir; hız ölçümü değildir. Yanıt elle yazılmıştır, LLM çağrısı yoktur. [Kayıt açıklaması](docs/DEMO.md).
 
 ## Paylaşmadan önce bir adım
 

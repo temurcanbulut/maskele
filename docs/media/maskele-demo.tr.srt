@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:06,500
+Sentetik destek kaydını incele.
+Tekrarlanan IP aynı token ile eşleşir.
+
+2
+00:00:06,500 --> 00:00:11,500
+Proje kodu otomatik yakalanmadı.
+Elle maskeleme kuralı ekle.
+
+3
+00:00:11,500 --> 00:00:17,000
+Maskele ve kopyala: altı eşleşme,
+beş benzersiz özgün değer.
+
+4
+00:00:17,000 --> 00:00:24,500
+Elle yazılmış örnek yanıtı yerelde aç.
+LLM isteği yapılmıyor.

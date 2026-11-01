@@ -1,0 +1,25 @@
+{
+  "capture_date": "2026-11-01",
+  "source": "four captures of the actual local browser application with synthetic fixtures",
+  "source_ui_commit": "77cd61db9ad4872b9ed13320660e51874e88bcba",
+  "masking_engine_base_commit": "77a4211781b2dc9b1cb8d41af728b8c2c512f497",
+  "duration_seconds": 24.5,
+  "dimensions": [
+    1248,
+    702
+  ],
+  "fps": 24,
+  "audio": false,
+  "mp4_sha256": "9a7d936d37d825395c390f4a6a97b82a639bf191fc22797c9fdeee4712f4534b",
+  "poster_sha256": "163d8f147dd595d9093a3d479dfd441f3c0979ca060e733fbcf6fdf07be5e5d9",
+  "editorial": "Four actual states with 6.5/5/5.5/7.5-second holds. A caption band is added above the captures. First three shots crop away the next section and add neutral letterboxing; controls, text and application state are not fabricated. Holds are not speed measurements.",
+  "workflow": {
+    "matches": 6,
+    "distinct_values": 5,
+    "restored_tokens": 5,
+    "reply": "manually typed example, no LLM call"
+  },
+  "model_or_provider_call": false,
+  "human_verified": false,
+  "automatic_full_decode": "PASS"
+}
