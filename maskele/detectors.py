@@ -131,10 +131,6 @@ SECRET_PATTERNS: list[tuple[str, re.Pattern]] = [
         "API_KEY",
         re.compile(r"(?<![\w.-])[MN][A-Za-z0-9_-]{23,25}\.[A-Za-z0-9_-]{6}\.[A-Za-z0-9_-]{27,38}(?![\w-])"),
     ),  # Discord
-    (
-        "PRIVATE_KEY",
-        re.compile(r"-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----[\s\S]+?-----END (?:[A-Z ]+ )?PRIVATE KEY-----"),
-    ),
     ("JWT", re.compile(r"\beyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}")),
     ("API_KEY", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}")),  # Anthropic
     ("API_KEY", re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}")),  # OpenAI
@@ -149,13 +145,31 @@ SECRET_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("API_KEY", re.compile(r"\bnpm_[A-Za-z0-9]{36}\b")),
 ]
 
+RE_PRIVATE_START = re.compile(r"-----BEGIN ((?:[A-Z][A-Z0-9 -]{0,39} )?PRIVATE KEY)-----")
+
+
+def _private_keys(text: str) -> Iterator[Match]:
+    """Linear scan: an unterminated key consumes the remainder, fail closed.
+
+    Searching for an END marker separately from each repeated BEGIN marker
+    would rescan the same suffix quadratically. Consume each found span once.
+    """
+    cursor = 0
+    while (start := RE_PRIVATE_START.search(text, cursor)) is not None:
+        marker = "-----END " + start.group(1) + "-----"
+        end = text.find(marker, start.end())
+        stop = len(text) if end < 0 else end + len(marker)
+        yield Match(start.start(), stop, "PRIVATE_KEY", text[start.start() : stop], 100)
+        cursor = stop
+
+
 # key=value / key: value biçimindeki secret'lar — sadece DEĞER maskelenir.
 # Tırnaklı değer kapanış tırnağına kadar alınır (virgül, boşluk, noktalı virgül içerebilir);
 # tırnaksız değer ilk ayırıcıda biter.
 RE_KV_SECRET = re.compile(
     r"""(?ix)
-    (?P<key>\b[\w.-]*(?:password|passwd|pwd|passphrase|parola|sifre|şifre|secret|token|api[_-]?key|
-        apikey|access[_-]?key|private[_-]?key|client[_-]?secret|merchant[_-]?(?:key|salt)|credential|auth(?!or))[\w.-]*)
+    (?P<key>\b[\w.-]{0,128}(?:password|passwd|pwd|passphrase|parola|sifre|şifre|secret|token|api[_-]?key|
+        apikey|access[_-]?key|private[_-]?key|client[_-]?secret|merchant[_-]?(?:key|salt)|credential|auth(?!or))[\w.-]{0,128})
     (?P<sep>\s{0,64}["']?\s{0,64}[:=]\s{0,64})
     (?:
         (?P<q>["'])(?P<qval>(?:\\.|(?!(?P=q))[^\n]){1,256}?)(?P=q)
@@ -392,6 +406,8 @@ def detect(text: str, kinds: Iterable[str] | None = None, keep_localhost: bool =
         found += (Match(s, e, "NAME", v, 35) for s, e, v in find_names(text, extra))
 
     # Öncelik: yüksek sayı = çakışmada kazanır
+    if on("PRIVATE_KEY"):
+        found += _private_keys(text)
     for kind, rx in SECRET_PATTERNS:
         if on(kind):
             found += _iter_regex(rx, text, kind, 100)

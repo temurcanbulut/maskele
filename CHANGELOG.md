@@ -7,6 +7,7 @@ Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/), sürümleme [Se
 - Breaking: proxy never restores executable tool arguments or URLs; secret kinds stay masked even in display text. CLI/UI explicit restoration is unchanged.
 - One-use five-minute UI launch capability; unauthenticated localhost root no longer discloses an API token.
 - Bound phone and key/value whitespace parsing; add pathological-input regressions.
+- Scan PEM private-key blocks linearly, masking an unterminated block through end of input; bound key-name scanning to prevent repeated suffix rescans.
 - Encrypt CLI disk sessions by default, with explicit plaintext opt-out. Anonymous clients no longer share response-ID vaults.
 - Add Telegram/Discord/SendGrid/DigitalOcean detection and scope tests; document ambiguous key formats.
 - Preserve synthetic demo provenance; no new model, training or paid provider result.

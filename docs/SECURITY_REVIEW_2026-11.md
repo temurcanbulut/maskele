@@ -6,7 +6,7 @@ independent penetration test, human data review or assurance certificate is clai
 | Finding | Resolution | Regression |
 |---|---|---|
 | M1 executable-output restore oracle | Proxy-only display allowlist; never restore tool arguments/input, URL, metadata, or SECRET/PASSWORD/API_KEY/JWT/PRIVATE_KEY | Chat/Responses/Anthropic JSON and SSE; all text chunk cut positions |
-| M2 pathological phone whitespace | Bounded separator repetition; key/value overlapping whitespace also bounded | Time-bounded subprocess on 200,000 spaces |
+| M2 pathological scanning | Bounded phone/KV separators and key-name spans; linear PEM scanner masks unterminated blocks through EOF | Time-bounded subprocesses on 200,000 spaces, repeated PEM starts and hyphenated key text |
 | M3 unauthenticated localhost root | One-use 5-minute capability exchanged for HttpOnly SameSite=Strict browser session; unauthenticated root returns 403 | token disclosure, reuse and authenticated refresh cases |
 | M4 plaintext persistence | CLI and library disk writes encrypt by default; plaintext requires explicit opt-out | default ciphertext and no-password fail-closed tests |
 | M5 detection coverage | Telegram, Discord, SendGrid, DigitalOcean shapes; named iyzico/PayTR/Azure/Twilio credentials | Offline manufactured fixtures, no provider queries |
