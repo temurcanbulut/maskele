@@ -23,6 +23,7 @@ class ReleaseGateTests(unittest.TestCase):
     def row(self, **extra):
         return {
             "head_sha": SHA,
+            "head_branch": "main",
             "event": "push",
             "run_number": 1,
             "status": "completed",
@@ -46,6 +47,11 @@ class ReleaseGateTests(unittest.TestCase):
         ):
             with self.assertRaises(SystemExit):
                 self.run_gate([self.row(), newer])
+
+    def test_pr_merge_ref_or_non_main_ci_does_not_qualify(self):
+        for rows in ([self.row(event="pull_request")], [self.row(head_branch="feature")]):
+            with self.assertRaises(SystemExit):
+                self.run_gate(rows)
 
     def test_invalid_repository_never_calls_network(self):
         with patch.object(gate.urllib.request, "urlopen") as request:

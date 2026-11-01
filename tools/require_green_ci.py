@@ -18,9 +18,13 @@ def require_successful_ci(repo, sha, token, workflow="ci.yml"):
     )
     with urllib.request.urlopen(request, timeout=30) as response:
         runs = json.load(response)["workflow_runs"]
-    matching = [r for r in runs if r["head_sha"] == sha and r["event"] in {"push", "pull_request", "workflow_dispatch"}]
+    matching = [
+        r
+        for r in runs
+        if r["head_sha"] == sha and r.get("head_branch") == "main" and r["event"] in {"push", "workflow_dispatch"}
+    ]
     if not matching:
-        raise SystemExit("No CI run for this exact source commit; release refused.")
+        raise SystemExit("No main-branch source CI for this exact commit; PR merge-ref checks do not qualify.")
     latest = max(matching, key=lambda r: (r.get("run_number", 0), r.get("run_attempt", 1)))
     if latest["status"] != "completed" or latest["conclusion"] != "success":
         raise SystemExit("Latest exact-commit CI is not successful; release refused.")
