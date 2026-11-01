@@ -24,14 +24,14 @@
 
 <main>
   <section class="step" aria-labelledby="s1">
-    <h2 id="s1"><span class="n">1</span>Modele göndermeden önce</h2>
+    <h1 id="s1">Modele göndermeden önce</h1>
     <p class="lede">Log'u, config'i ya da müşteri kaydını yapıştır. Hassas değerler soldaki metinde işaretlenir, sağda modele gidecek hâli oluşur.</p>
     <div class="pair">
       <div class="pane">
         <label for="src">Orijinal</label>
         <div class="editor">
           <div id="src-hl" class="hl" aria-hidden="true"></div>
-          <textarea id="src" spellcheck="false" placeholder="Örn: 2026-10-15 ERROR 85.105.44.17 → db 10.20.3.9, müşteri Ahmet Yılmaz (TCKN 10000000146) …"></textarea> <!-- maskele:ignore -->
+          <textarea id="src" spellcheck="false" placeholder="Örn: kaynak 192.0.2.7 → veritabanı 192.0.2.9, iletişim destek@example.invalid"></textarea> <!-- maskele:ignore -->
         </div>
         <div id="chips" class="chips" aria-live="polite"></div>
         <div id="suspects" class="suspects" hidden>
@@ -57,7 +57,7 @@
   </section>
 
   <section class="step" aria-labelledby="s2">
-    <h2 id="s2"><span class="n">2</span>Cevabı geri çevir</h2>
+    <h2 id="s2">Cevabı geri çevir</h2>
     <p class="lede">Modelin cevabını yapıştır. Token'lar, bozulmuş yazımları da dahil, gerçek değerlerine döner.</p>
     <div class="pair">
       <div class="pane">
