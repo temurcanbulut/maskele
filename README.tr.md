@@ -29,7 +29,7 @@ Log, config veya destek kaydındaki tespit edilen değerler `[[IP_1]]`, `[[NAME_
 |---|---|---|
 | Kurulumsuz tarayıcı | [Demoyu aç](https://temurcanbulut.github.io/maskele/) | Sekme belleğinde |
 | Yerel arayüz | `maskele ui` | Varsayılan olarak süreç belleğinde |
-| Terminal | `maskele mask dosya.log` | Yerel kasa; isteğe bağlı şifreleme |
+| Terminal | `maskele mask dosya.log` | Varsayılan şifreli yerel kasa |
 | API proxy | `maskele proxy --provider openai` | İstek belleğinde; bağlı Responses konuşmalarında en fazla bir saat |
 
 Tarayıcı sürümü aynı Python motorunu Pyodide ile çalıştırır; uygulama ve motor dosyalarını kendi adresinden yükler, metni sunucuya göndermez. Proxy ise yapılandırılan LLM sağlayıcısına istek yapar; kimlik başlıkları ve izinli protokol alanları iletilir.
@@ -100,3 +100,9 @@ Görsel, ses ve dosya içerikleri incelenmez; proxy'de `media = "block"` ile red
 [Geliştirme ve testler](README.md#development) · [Doğrulama kaydı](docs/VERIFICATION.md) · [Güvenlik](SECURITY.md) · [Katkı](CONTRIBUTING.md) · [Değişiklikler](CHANGELOG.md).
 
 MIT © Temur Can Bulut.
+
+## Proxy geri çevirme politikası (0.5)
+
+Proxy yalnızca görüntülenecek metindeki tanınan kişisel verileri geri çevirir. Parola, genel secret, API anahtarı, JWT ve özel anahtar token olarak kalır. Araç çağrısı argümanları/girdileri, URL ve protokol metaverisi akışlı yanıtlarda da geri açılmaz. CLI/UI içindeki açık, yerel geri çevirme korunur. Bu sürüm güvenlik varsayılanını değiştirir; ajan yürütme koruması değildir. [Geçiş ve kapsam](docs/SECURITY_REVIEW_2026-11.md).
+
+Diskte kalıcı CLI kasası varsayılan olarak parola ile şifrelidir (`.[crypto]` gerekir); bellek içi UI/proxy parola istemez. `MASKELE_PASSWORD` veya terminal istemi kullanılır. `--plaintext-vault` açık düz metin istisnasıdır; şifreli bir kasayı düz metne düşürmez. Yerel UI beş dakika geçerli tek kullanımlık giriş bağlantısı yazdırır; başka oturumdan kök sayfayı açmak API anahtarını vermez.

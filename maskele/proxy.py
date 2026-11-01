@@ -32,7 +32,8 @@ from collections import Counter
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
-from .core import HINT, Masker, ProtocolFieldError, StreamUnmasker
+from .core import HINT, Masker, ProtocolFieldError
+from .restore_policy import DisplayStream, restore_response, restore_text
 from .vault import Vault
 
 PROVIDERS = {
@@ -99,16 +100,16 @@ class SSERewriter:
         self.m = masker
         self.allowed = allowed
         self.mode = mode
-        self.streams: dict[tuple, StreamUnmasker] = {}
+        self.streams: dict[tuple, DisplayStream] = {}
         self._unknown: set[str] = set()
         self.response_id: str | None = None
         self.anthropic_types: dict[int, str] = {}
         self.template: dict | None = None
         self.restored = 0
 
-    def _s(self, key: tuple, json_ctx: bool = False) -> StreamUnmasker:
+    def _s(self, key: tuple, json_ctx: bool = False) -> DisplayStream:
         if key not in self.streams:
-            self.streams[key] = self.m.stream(json_ctx, mode=self.mode, allowed=self.allowed)
+            self.streams[key] = DisplayStream(self.m, self.allowed, self.mode)
         return self.streams[key]
 
     @property
@@ -116,7 +117,7 @@ class SSERewriter:
         return len(set().union(*(s.unknown for s in self.streams.values())) | self._unknown)
 
     def _obj(self, obj):
-        return self.m.unmask_obj(obj, mode=self.mode, allowed=self.allowed)
+        return restore_response(self.m, obj, mode=self.mode, allowed=self.allowed)
 
     def _flush(self, key: tuple) -> str:
         s = self.streams.pop(key, None)
@@ -135,7 +136,7 @@ class SSERewriter:
         try:
             obj = json.loads(data)
         except ValueError:
-            return [(event, self.m.unmask(data, mode=self.mode, allowed=self.allowed).text)]
+            return [(event, data)]  # Unknown event formats are never a restore channel.
         if not isinstance(obj, dict):
             return [(event, json.dumps(self._obj(obj), ensure_ascii=False))]
 
@@ -150,8 +151,8 @@ class SSERewriter:
             out.append((event, self._obj(obj)))
         elif t == "content_block_delta":
             i, d = obj.get("index", 0), obj.get("delta", {})
-            for field, json_ctx in (("text", False), ("thinking", False), ("partial_json", True)):
-                if isinstance(d.get(field), str):
+            for field, json_ctx in (("text", False),):
+                if self.anthropic_types.get(i) == "text" and isinstance(d.get(field), str):
                     d[field] = self._s(("a", i, field), json_ctx).feed(d[field])
             out.append((event, obj))
         elif t == "content_block_stop":
@@ -171,16 +172,11 @@ class SSERewriter:
             out.append((event, obj))
 
         # --- OpenAI Responses API -----------------------------------------------
-        elif t in (
-            "response.output_text.delta",
-            "response.function_call_arguments.delta",
-            "response.reasoning_summary_text.delta",
-            "response.refusal.delta",
-        ):
+        elif t in ("response.output_text.delta",):
             key = ("r", t.rsplit(".", 1)[0], obj.get("item_id"), obj.get("output_index"), obj.get("content_index"))
             obj["delta"] = self._s(key, "arguments" in t).feed(obj.get("delta", ""))
             out.append((event, obj))
-        elif t.endswith(".done") and t.startswith("response.") and t != "response.done":
+        elif t == "response.output_text.done":
             base = t.rsplit(".", 1)[0]
             key = ("r", base, obj.get("item_id"), obj.get("output_index"), obj.get("content_index"))
             rem = self._flush(key)
@@ -204,10 +200,6 @@ class SSERewriter:
                 ci, d = ch.get("index", 0), ch.get("delta") or {}
                 if isinstance(d.get("content"), str):
                     d["content"] = self._s(("c", ci)).feed(d["content"])
-                for tc in d.get("tool_calls") or []:
-                    fn = tc.get("function") or {}
-                    if isinstance(fn.get("arguments"), str):
-                        fn["arguments"] = self._s(("t", ci, tc.get("index", 0)), True).feed(fn["arguments"])
                 if ch.get("finish_reason"):
                     self._flush_choice(ci, d)
                     ch["delta"] = d
@@ -328,8 +320,10 @@ class ConversationStore:
         self._lock = threading.Lock()
         self._key = secrets.token_bytes(32)
 
-    def principal(self, headers) -> str:
+    def principal(self, headers) -> str | None:
         cred = "\x1f".join((headers.get(h) or "") for h in ("Authorization", "x-api-key", "api-key", "X-Maskele-Key"))
+        if not cred.replace("\x1f", ""):
+            return None
         return hmac.new(self._key, cred.encode(), hashlib.sha256).hexdigest()
 
     def put(self, principal: str, response_id: str, vault: dict) -> None:
@@ -746,7 +740,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         allowed: set[str] = set()
         principal = self.server.conversations.principal(self.headers)
         prev_id = self._previous_response_id(raw)
-        if prev_id:
+        if prev_id and principal is not None:
             stored = self.server.conversations.get(principal, prev_id)
             if stored:
                 # Önceki turun eşlemeleri: numaralar tutarlı kalır, eski token'lar geri çevrilir
@@ -757,7 +751,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
             return
 
         def remember(response_id) -> None:
-            if isinstance(response_id, str) and response_id and m.vault.tokens:
+            if principal is not None and isinstance(response_id, str) and response_id and m.vault.tokens:
                 self.server.conversations.put(principal, response_id, m.vault.to_dict())
 
         req = urllib.request.Request(
@@ -852,15 +846,16 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 parsed = json.loads(data)
                 if isinstance(parsed, dict) and parsed.get("object") == "response":
                     remember(parsed.get("id"))
-                data = json.dumps(m.unmask_obj(parsed, stats, mode=mode, allowed=allowed), ensure_ascii=False).encode(
-                    "utf-8"
-                )
+                data = json.dumps(
+                    restore_response(m, parsed, stats, mode=mode, allowed=allowed), ensure_ascii=False
+                ).encode("utf-8")
                 restored, unrestored = stats["restored"], stats["unknown"]
             except ValueError:
                 pass
         elif rtype.startswith("text/"):
-            r = m.unmask(data.decode("utf-8", errors="replace"), mode=mode, allowed=allowed)
-            restored, unrestored, data = r.restored, len(r.unknown), r.text.encode("utf-8")
+            stats = Counter()
+            text = restore_text(m, data.decode("utf-8", errors="replace"), allowed, mode, stats)
+            restored, unrestored, data = stats["restored"], stats["unknown"], text.encode("utf-8")
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         record(restored, unrestored)

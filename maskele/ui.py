@@ -16,10 +16,13 @@ import json
 import secrets
 import sys
 import threading
+import time
 import webbrowser
 from collections.abc import Callable
+from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from importlib import resources
+from urllib.parse import parse_qs, urlsplit
 
 from .core import Masker
 from .uiapp import UIApp
@@ -53,8 +56,13 @@ class UIServer(ThreadingHTTPServer):
         self.session = session
         self.quiet = quiet
         self.token = secrets.token_urlsafe(24)
+        self.browser_session = secrets.token_urlsafe(32)
+        self.launch_code = secrets.token_urlsafe(32)
+        self.launch_expires = time.monotonic() + 300
+        self.launch_lock = threading.Lock()
         port = self.server_address[1]
         self.allowed_hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+        self.cookie_name = f"maskele_ui_{port}"
 
 
 class UIHandler(BaseHTTPRequestHandler):
@@ -63,7 +71,7 @@ class UIHandler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):  # noqa: N802
         if not self.server.quiet:
-            sys.stderr.write(f"[maskele-ui] {fmt % args}\n")
+            sys.stderr.write(f"[maskele-ui] {self.command} request\n")  # Never log launch capabilities.
 
     def _send(self, code: int, body: bytes, ctype: str) -> None:
         self.send_response(code)
@@ -94,7 +102,35 @@ class UIHandler(BaseHTTPRequestHandler):
         path = self.path.split("?", 1)[0]
         if not self._guard(api=path.startswith("/api/")):
             return
+        if path == "/launch":
+            code = parse_qs(urlsplit(self.path).query).get("code", [""])[0]
+            with self.server.launch_lock:
+                valid = bool(self.server.launch_code) and time.monotonic() < self.server.launch_expires
+                valid = valid and hmac.compare_digest(code, self.server.launch_code)
+                if valid:
+                    self.server.launch_code = ""
+            if not valid:
+                return self._json(403, {"error": "Launch link expired or already used. Restart maskele ui."})
+            self.send_response(303)
+            self.send_header("Location", "/")
+            self.send_header(
+                "Set-Cookie",
+                f"{self.server.cookie_name}={self.server.browser_session}; HttpOnly; SameSite=Strict; Path=/",
+            )
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
         if path == "/":
+            cookie = SimpleCookie()
+            try:
+                cookie.load(self.headers.get("Cookie", ""))
+                value = cookie[self.server.cookie_name].value if self.server.cookie_name in cookie else ""
+            except Exception:
+                value = ""
+            if not hmac.compare_digest(value, self.server.browser_session):
+                return self._json(403, {"error": "Open the one-use launch link printed by maskele ui."})
             html = _asset("index.html").decode()
             html = html.replace("{{TOKEN}}", self.server.token).replace("{{SESSION}}", _esc(self.server.session))
             return self._send(200, html.encode(), "text/html; charset=utf-8")
@@ -139,7 +175,7 @@ def _esc(s: str) -> str:
 
 def serve(masker: Masker, session: str, port: int = 8788, open_browser: bool = True, **kw) -> None:
     srv = UIServer(("127.0.0.1", port), masker, session, **kw)
-    url = f"http://127.0.0.1:{srv.server_address[1]}/"
+    url = f"http://127.0.0.1:{srv.server_address[1]}/launch?code={srv.launch_code}"
     sys.stderr.write(f"maskele arayüzü: {url}\nDurdurmak için Ctrl+C.\n")
     if open_browser:
         threading.Timer(0.4, lambda: webbrowser.open(url)).start()

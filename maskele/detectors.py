@@ -104,7 +104,9 @@ RE_MAC = re.compile(r"(?<![\w:-])(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}(?![\w:-
 RE_TCKN = re.compile(_D + r"[1-9]\d{10}" + _E)
 RE_VKN = re.compile(_D + r"\d{10}" + _E)
 RE_IBAN = re.compile(r"(?<![\w])[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){2,7}(?: ?[A-Z0-9]{1,4})?(?![\w])")
-RE_PHONE_TR = re.compile(r"(?<![\w+])(?:\+90|0090|0)?[ (-]*5\d{2}[ )-]*\d{3}[ -]*\d{2}[ -]*\d{2}(?![\w])")
+RE_PHONE_TR = re.compile(
+    r"(?<![\w+])(?:\+90|0090|0)?[ (-]{0,3}5\d{2}[ )-]{0,3}\d{3}[ -]{0,3}\d{2}[ -]{0,3}\d{2}(?![\w])"
+)
 RE_PLATE_TR = re.compile(r"(?<![\w:.-])(0[1-9]|[1-7]\d|8[01]) ?([A-PR-VYZ]{1,3}) ?(\d{2,5})(?![\w:-]|\.\w)")
 
 
@@ -121,6 +123,14 @@ RE_CARD = re.compile(r"(?<![\w])(?:\d[ -]?){12,18}\d(?![\w])")
 
 # Secret'lar — sağlayıcıya özel desenler
 SECRET_PATTERNS: list[tuple[str, re.Pattern]] = [
+    ("API_KEY", re.compile(r"(?<![\w-])\d{8,12}:[A-Za-z0-9_-]{35}(?![\w-])")),  # Telegram bot token
+    ("API_KEY", re.compile(r"(?<![\w.-])SG\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]{43}(?![\w-])")),  # SendGrid
+    ("API_KEY", re.compile(r"\b(?:dop|doo|dor)_v1_[a-f0-9]{64}\b")),  # DigitalOcean
+    ("API_KEY", re.compile(r"(?<![\w.-])mfa\.[A-Za-z0-9_-]{84}(?![\w-])")),  # Discord MFA
+    (
+        "API_KEY",
+        re.compile(r"(?<![\w.-])[MN][A-Za-z0-9_-]{23,25}\.[A-Za-z0-9_-]{6}\.[A-Za-z0-9_-]{27,38}(?![\w-])"),
+    ),  # Discord
     (
         "PRIVATE_KEY",
         re.compile(r"-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----[\s\S]+?-----END (?:[A-Z ]+ )?PRIVATE KEY-----"),
@@ -145,8 +155,8 @@ SECRET_PATTERNS: list[tuple[str, re.Pattern]] = [
 RE_KV_SECRET = re.compile(
     r"""(?ix)
     (?P<key>\b[\w.-]*(?:password|passwd|pwd|passphrase|parola|sifre|şifre|secret|token|api[_-]?key|
-        apikey|access[_-]?key|private[_-]?key|client[_-]?secret|credential|auth(?!or))[\w.-]*)
-    (?P<sep>\s*["']?\s*[:=]\s*)
+        apikey|access[_-]?key|private[_-]?key|client[_-]?secret|merchant[_-]?(?:key|salt)|credential|auth(?!or))[\w.-]*)
+    (?P<sep>\s{0,64}["']?\s{0,64}[:=]\s{0,64})
     (?:
         (?P<q>["'])(?P<qval>(?:\\.|(?!(?P=q))[^\n]){1,256}?)(?P=q)
       | (?P<val>(?:\$\{[^}\s]{0,64}\}|[^\s"'{}]){1,256})

@@ -1,6 +1,6 @@
 """maskele — LLM'e göndermeden önce hassas veriyi maskele, cevabı geri çevir."""
 
-__version__ = "0.4.4"
+__version__ = "0.5.0"
 
 from .config import Config, load_config  # noqa: E402
 from .core import HINT, Masker, StreamUnmasker  # noqa: E402

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "maskele"
-version = "0.4.4"
+version = "0.5.0"
 description = "LLM'e göndermeden önce hassas veriyi maskele, cevabı geri çevir. CLI, OpenAI/Anthropic proxy'si ve yerel arayüz; TCKN, VKN, IBAN, plaka ve Türkçe isim desteği."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,7 +29,7 @@ dependencies = []
 
 [project.optional-dependencies]
 crypto = ["cryptography>=50.0.2"]
-dev = ["pytest>=8", "cryptography>=50.0.2", "ruff>=0.6"]
+dev = ["pytest==9.2.0", "cryptography>=50.0.2", "ruff==0.17.3"]
 
 [project.urls]
 Homepage = "https://github.com/temurcanbulut/maskele"
