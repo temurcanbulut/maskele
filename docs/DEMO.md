@@ -1,6 +1,8 @@
 # Walkthrough: mask, review, restore
 
-[Watch the MP4](media/maskele-demo-24s.mp4) · [English captions](media/maskele-demo.en.srt) · [Türkçe altyazı](media/maskele-demo.tr.srt) · [Try the browser app](https://temurcanbulut.github.io/maskele/)
+https://github.com/user-attachments/assets/8b8bf63d-f4c8-43a2-86c7-0c2fecde75d9
+
+[Watch the MP4](https://github.com/user-attachments/assets/8b8bf63d-f4c8-43a2-86c7-0c2fecde75d9) · [Download MP4](https://github.com/temurcanbulut/maskele/raw/refs/heads/main/docs/media/maskele-demo-24s.mp4) · [English captions](media/maskele-demo.en.srt) · [Türkçe altyazı](media/maskele-demo.tr.srt) · [Try the browser app](https://temurcanbulut.github.io/maskele/)
 
 The 24.5-second silent walkthrough shows four actual captures of the updated application running its Python engine locally through Pyodide. These UI changes are published at commit [77cd61d](https://github.com/temurcanbulut/maskele/commit/77cd61db9ad4872b9ed13320660e51874e88bcba). Caption bars explain the workflow; editorial holds are not response-time measurements. The first three shots crop away the next section and add neutral letterboxing. No application result, control or state is fabricated.
 
