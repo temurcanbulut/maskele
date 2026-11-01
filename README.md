@@ -15,9 +15,9 @@
 <p align="center">Replace sensitive values before sharing text with an LLM.<br>Keep consistent tokens. Restore the answer locally.</p>
 <p align="center"><a href="README.tr.md">Türkçe</a> · <a href="https://temurcanbulut.github.io/maskele/">Try in your browser</a> · <a href="#run-locally">Run locally</a> · <a href="docs/ARCHITECTURE.md">How it works</a></p>
 
-https://github.com/user-attachments/assets/8b8bf63d-f4c8-43a2-86c7-0c2fecde75d9
+https://github.com/user-attachments/assets/513654bf-0e5d-4147-9dc3-ab1541b7eca8
 
-[Watch the 24.5-second MP4](https://github.com/user-attachments/assets/8b8bf63d-f4c8-43a2-86c7-0c2fecde75d9) · [Download MP4](https://github.com/temurcanbulut/maskele/raw/refs/heads/main/docs/media/maskele-demo-24s.mp4) · [Static preview](docs/images/workflow-2026-11.png) · [English captions](docs/media/maskele-demo.en.srt) · [Türkçe altyazı](docs/media/maskele-demo.tr.srt). Four actual captures of the updated browser UI, with synthetic fixtures and editorial holds; this is not a speed benchmark. The reply is a typed example with no LLM call. [Recording context](docs/DEMO.md).
+[Watch the 24.5-second MP4](https://github.com/user-attachments/assets/513654bf-0e5d-4147-9dc3-ab1541b7eca8) · [Download MP4](https://github.com/temurcanbulut/maskele/raw/refs/heads/main/docs/media/maskele-demo-24s.mp4) · [Static preview](docs/images/workflow-2026-11.png) · [English captions](docs/media/maskele-demo.en.srt) · [Türkçe altyazı](docs/media/maskele-demo.tr.srt). Four actual captures of the updated browser UI, with synthetic fixtures and editorial holds; this is not a speed benchmark. The reply is a typed example with no LLM call. [Recording context](docs/DEMO.md).
 
 ## A small step before you share
 
@@ -125,8 +125,3 @@ python benchmarks/run.py
 CI runs on Linux, macOS and Windows with Python 3.11–3.13. The browser build has a separate real-Pyodide smoke test before Pages deployment. [Verification record](docs/VERIFICATION.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md).
 
 MIT © Temur Can Bulut.
-
-
-
-https://github.com/user-attachments/assets/513654bf-0e5d-4147-9dc3-ab1541b7eca8
-
