@@ -36,7 +36,7 @@ jobs:
       - name: Validate tag matches package
         run: python -c "import os,maskele; assert os.environ['RELEASE_TAG'] == 'v'+maskele.__version__"
       - run: cd dist && sha256sum *.whl *.tar.gz > SHA256SUMS.txt
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-bundle
           path: dist/*
