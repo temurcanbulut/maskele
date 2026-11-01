@@ -142,7 +142,7 @@ def test_vault_ttl(tmp_path):
     p = tmp_path / "s.json"
     m = Masker()
     m.mask("10.0.0.5")
-    VaultStore(p).save(m.vault)
+    VaultStore(p, encrypt=False).save(m.vault)
     old = time.time() - 3 * 3600
     os.utime(p, (old, old))
     assert len(VaultStore(p, ttl_hours=24).load()) == 1

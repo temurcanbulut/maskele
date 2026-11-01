@@ -6,6 +6,8 @@ from pathlib import Path
 os.environ["MASKELE_NO_CONFIG"] = "1"
 for k in ("MASKELE_PASSWORD", "MASKELE_SESSION"):
     os.environ.pop(k, None)
+# CLI persistence tests use a deterministic test-only password, never a user key.
+os.environ["MASKELE_PASSWORD"] = "offline-test-vault-only"
 # Yerel sahte sunuculara giden istekler kurumsal proxy'ye gitmesin
 os.environ["NO_PROXY"] = os.environ["no_proxy"] = "127.0.0.1,localhost"
 

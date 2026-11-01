@@ -60,7 +60,7 @@ extra_first_names = []
 # group = "v"           # sadece bu grup maskelenir
 
 [vault]
-encrypt = false         # true ise parola MASKELE_PASSWORD'dan ya da istemden alınır
+encrypt = true          # parola MASKELE_PASSWORD'dan ya da istemden alınır
 ttl_hours = 24          # bu süreden eski oturumlar her çalıştırmada silinir (0 = kapalı)
 
 [proxy]
@@ -89,7 +89,7 @@ class Config:
     allow_patterns: list[re.Pattern] = field(default_factory=list)
     extra_first_names: list[str] = field(default_factory=list)
     custom: list[CustomPattern] = field(default_factory=list)
-    vault_encrypt: bool = False
+    vault_encrypt: bool = True
     vault_ttl_hours: float = 24
     proxy_upstream: str = "https://api.openai.com"
     proxy_port: int = 8787

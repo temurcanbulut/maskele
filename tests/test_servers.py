@@ -291,7 +291,7 @@ def test_openai_stream_tool_args(stack):
             for tc in json.loads(d)["choices"][0]["delta"].get("tool_calls") or []:
                 args += tc["function"]["arguments"]
     # Proxy katıdır: yalnızca [[TOKEN]] çevrilir, koddaki IP_1 değişken adı korunur
-    assert json.loads(args) == {"to": "ahmet@firma.com.tr", "note": "10.20.3.7 kontrol", "code": "IP_1 = 1"}
+    assert json.loads(args) == {"to": "[[EMAIL_1]]", "note": "[[IP_1]] kontrol", "code": "IP_1 = 1"}
 
 
 def test_anthropic_stream(stack):
@@ -401,7 +401,9 @@ def ui():
 
 
 def test_ui_page_and_headers(ui):
-    st, h, html = call(ui, "GET", "/")
+    status, headers, _ = call(ui, "GET", f"/launch?code={ui.launch_code}")
+    assert status == 303
+    st, h, html = call(ui, "GET", "/", headers={"Cookie": headers["Set-Cookie"].split(";", 1)[0]})
     assert st == 200 and ui.token in html and "{{TOKEN}}" not in html
     assert "default-src 'none'" in h["Content-Security-Policy"]
     assert h["X-Content-Type-Options"] == "nosniff"

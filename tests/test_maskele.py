@@ -220,7 +220,7 @@ def test_vault_persistence(tmp_path):
     p = tmp_path / "v.json"
     m = Masker(Vault())
     m.mask("10.0.0.5")
-    m.vault.save(p)
+    m.vault.save(p, plaintext=True)
     if os.name == "posix":
         assert oct(p.stat().st_mode)[-3:] == "600"
     m2 = Masker(Vault.load(p))

@@ -28,3 +28,11 @@ pytest && ruff check .
 - Gerçek değer hiçbir log'a, rapora ya da hata mesajına yazılmaz.
 - Yanlış pozitif, yanlış negatiften daha az zararlıdır ama ikisi de hatadır; test ekle.
 - Kullanıcıya dönük metinler Türkçe, kod ve tanımlayıcılar İngilizce.
+
+## CI and review history
+
+Security fixes must run CI without skip directives. Release tags require green
+checks for the exact commit. Keep changes reviewable and preserve actual history;
+do not backdate commits or manufacture issues, reviews or benchmark gains.
+
+[English contribution guide](CONTRIBUTING.en.md). Runtime copy is currently Turkish.

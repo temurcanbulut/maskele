@@ -84,8 +84,8 @@ class Vault:
     def load(cls, path: Path) -> Vault:
         return VaultStore(path).load()
 
-    def save(self, path: Path) -> None:
-        VaultStore(path).save(self)
+    def save(self, path: Path, *, password: str | None = None, plaintext: bool = False) -> None:
+        VaultStore(path, password=password, encrypt=not plaintext).save(self)
 
 
 def _b64(b: bytes) -> str:
@@ -111,7 +111,7 @@ def _aesgcm():
 class VaultStore:
     """Bir oturumun diskteki kasası."""
 
-    def __init__(self, path: Path, password: str | None = None, encrypt: bool = False, ttl_hours: float = 0):
+    def __init__(self, path: Path, password: str | None = None, encrypt: bool = True, ttl_hours: float = 0):
         self.path = Path(path)
         self.password = password
         self.encrypt = encrypt or password is not None

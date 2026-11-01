@@ -2,6 +2,15 @@
 
 Biçim [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/), sürümleme [SemVer](https://semver.org/lang/tr/).
 
+## [0.5.0] — 2026-11-01 · Güvenli geri çevirme
+
+- Breaking: proxy never restores executable tool arguments or URLs; secret kinds stay masked even in display text. CLI/UI explicit restoration is unchanged.
+- One-use five-minute UI launch capability; unauthenticated localhost root no longer discloses an API token.
+- Bound phone and key/value whitespace parsing; add pathological-input regressions.
+- Encrypt CLI disk sessions by default, with explicit plaintext opt-out. Anonymous clients no longer share response-ID vaults.
+- Add Telegram/Discord/SendGrid/DigitalOcean detection and scope tests; document ambiguous key formats.
+- Preserve synthetic demo provenance; no new model, training or paid provider result.
+
 ## [0.4.4] — 2026-11-01 · Yayın bütünlüğü
 
 - Dağıtımı değişmez GitHub release ve doğrulanabilir release attestation kaydıyla yayımla.

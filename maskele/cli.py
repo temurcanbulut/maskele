@@ -90,6 +90,10 @@ def _kinds(args, cfg: Config) -> list[str]:
 
 
 def _password(store: VaultStore, cfg: Config, args, creating: bool) -> str | None:
+    plaintext = getattr(args, "plaintext_vault", False)
+    if plaintext and not store.is_encrypted():
+        _err("Warning: plaintext vault requested; Windows chmod does not restrict inherited ACLs.")
+        return None
     want = store.is_encrypted() or cfg.vault_encrypt or getattr(args, "encrypt", False)
     if not want:
         return None
@@ -115,6 +119,8 @@ def _store(args, cfg: Config, creating: bool = False) -> VaultStore:
     pw = _password(store, cfg, args, creating)
     if pw is not None:
         store.password, store.encrypt = pw, True
+    elif not store.is_encrypted():
+        store.encrypt = False  # explicit config/flag opt-out from the default
     return store
 
 
@@ -411,6 +417,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="cmd", required=True, metavar="KOMUT")
 
     def session(sp):
+        sp.add_argument("--plaintext-vault", action="store_true", help="explicitly allow unencrypted disk persistence")
         sp.add_argument(
             "-s",
             "--session",

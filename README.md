@@ -125,3 +125,9 @@ python benchmarks/run.py
 CI runs on Linux, macOS and Windows with Python 3.11–3.13. The browser build has a separate real-Pyodide smoke test before Pages deployment. [Verification record](docs/VERIFICATION.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md).
 
 MIT © Temur Can Bulut.
+
+## Proxy restore policy (0.5)
+
+The proxy restores recognized PII only in display text. Passwords, generic secrets, API keys, JWTs and private keys remain tokens. Tool-call arguments/inputs, URLs and protocol metadata are never restored, including streaming OpenAI Chat/Responses and Anthropic tool events. Explicit CLI/UI unmask remains available for a local human-reviewed workflow. This is a breaking security default; it is not an agent execution sandbox. [Migration and scope](docs/SECURITY_REVIEW_2026-11.md).
+
+Disk-persistent CLI sessions use password encryption by default (`.[crypto]` required); process-memory UI/proxy sessions do not prompt. Use `MASKELE_PASSWORD` or the terminal prompt. `--plaintext-vault` is an explicit opt-out and does not downgrade an already encrypted vault. The local UI prints a five-minute, single-use launch URL; opening the bare root in another session cannot retrieve its API token.
