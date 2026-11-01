@@ -125,3 +125,8 @@ python benchmarks/run.py
 CI runs on Linux, macOS and Windows with Python 3.11–3.13. The browser build has a separate real-Pyodide smoke test before Pages deployment. [Verification record](docs/VERIFICATION.md) · [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md).
 
 MIT © Temur Can Bulut.
+
+
+
+https://github.com/user-attachments/assets/513654bf-0e5d-4147-9dc3-ab1541b7eca8
+
